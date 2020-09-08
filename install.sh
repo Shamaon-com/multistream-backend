@@ -18,7 +18,7 @@ fi
 apt-get update && apt-get upgrade -y
 } > /dev/null
 
-sudo apt-get install build-essential
+sudo apt-get -y install build-essential libssl-dev
 
 ########################
 ##   INSTALL NGINX    ##
@@ -40,6 +40,12 @@ cd nginx-1.18.0
 make -j 1
 sudo make install
 
+########################
+##   INSTALL PHP    ##
+########################
+cd
+
+sudo apt-get -y install php-fpm php-mysql 
 
 ########################
 ##   INSTALL FFMPEG   ##

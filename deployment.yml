@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources: 
+  NignxToDynamoRole: 
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "ec2.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+  RolePolicies: 
+    Type: "AWS::IAM::Policy"
+    Properties: 
+      PolicyName: "NginxToDynamoPolicy"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Action: "dynamodb:Query"
+            Resource: "arn:aws:dynamodb:*:*:table/dynamo7539873d-dev"
+      Roles: 
+        - 
+          Ref: "NignxToDynamoRole"
+  RootInstanceProfile: 
+    Type: "AWS::IAM::InstanceProfile"
+    Properties: 
+      Roles: 
+        - 
+          Ref: "NignxToDynamoRole"
