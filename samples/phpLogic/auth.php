@@ -2,10 +2,16 @@
 
 include 'utils.php';
 
+error_reporting(E_ALL);
+ini_set("log_errors", true);
+ini_set("error_log", "/errorlog.log");
 
-$streamkey = $argv[1];
 
-echo $streamkey;
+
+//$streamkey = $argv[1];
+$streamkey = $_POST["name"];
+
+error_log(print_r($streamkey, true));
 
 if (!$streamkey){
     echo "\nNo streamkey\n";
