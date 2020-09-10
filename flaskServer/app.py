@@ -2,7 +2,8 @@ import json
 import boto3
 import os
 from flask import Flask
-from flask import request
+from flask import request, redirect
+import socket
 
 app = Flask(__name__)
 client = boto3.client("dynamodb", region_name="eu-west-1")
@@ -14,8 +15,11 @@ def getAdress(service):
         'youtube': 'rtmp://a.rtmp.youtube.com/live2/',
         'facebook': 'rtmp://127.0.0.1:1936/rtmp/'
     }
-
-    return adresses[service]
+    
+    ip = socket.gethostbyname_ex(adresses[service].split('/')[2])[2][0]
+    appName = adresses[service].split('/')[3]
+    print(ip, appName)
+    return 'rtmp://' + ip + '/' + appName + '/'
 
 
 @app.route("/")
@@ -63,7 +67,8 @@ def mutltistream():
 
     for item in response["Items"]:
         if item["service"]['S'].lower() == appName and item["active"]['BOOL']:
-            return getAdress(item["service"]['S'].lower()) + item['sk']['S'], 302
+            app.logger.debug(getAdress(item["service"]['S'].lower()) + item['sk']['S'])
+            return redirect(getAdress(item["service"]['S'].lower()) + item['sk']['S'], code=302)
 
 
     return "Denied", 403
