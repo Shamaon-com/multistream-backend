@@ -32,9 +32,8 @@ class Instagram:
         """
             Checks if IG streamkey exists and is active aka is stream is active in Instagram
         """
-        current = self.live.send_request("live/{}/info/".format(self.instagramKey.split('?')[0]))
-        app.logger.debug(current)
-        if self.instagramKey and current:
+
+        if self.instagramKey and self.live.send_request("live/{}/info/".format(self.instagramKey.split('?')[0])):
             return True
         return False
       
@@ -44,6 +43,7 @@ class Instagram:
             self.live.start_broadcast()
             app.logger.debug("ID: {broadcast_id}, \nKey: {key}".format(broadcast_id=self.live.broadcast_id, key=self.live.stream_key))
             self.item['instagramKey'] = {'S': self.live.stream_key}
+            app.logger.debug(self.live.stream_server)
             app.logger.debug(self.item)
             client.put_item(
                 TableName=tableName,
