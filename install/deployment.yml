@@ -1,3 +1,4 @@
+#  aws cloudformation deploy --template-file ../install/deployment.yml --stack-name NginxMultistreamRole --capabilities CAPABILITY_NAMED_IAM
 AWSTemplateFormatVersion: "2010-09-09"
 Resources: 
   NignxToDynamoRole: 
@@ -22,7 +23,10 @@ Resources:
         Statement: 
           - 
             Effect: "Allow"
-            Action: "dynamodb:Query"
+            Action: [
+              "dynamodb:Query",
+              "dynamodb:PutItem"
+            ]
             Resource: "arn:aws:dynamodb:*:*:table/dynamo7539873d-dev"
       Roles: 
         - 
